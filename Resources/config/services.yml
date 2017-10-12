@@ -1,0 +1,13 @@
+services:
+
+    autologic_redirect.event.redirect_listener:
+        class: Autologic\Bundle\RedirectBundle\Event\RedirectListener
+        arguments:
+            - '@autologic_redirect.service.redirect_service'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    autologic_redirect.service.redirect_service:
+        class: Autologic\Bundle\RedirectBundle\Service\RedirectService
+        arguments:
+            - '@service_container'

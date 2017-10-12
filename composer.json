@@ -1,0 +1,21 @@
+{
+    "name": "autologic-web/redirect-bundle",
+    "description": "A Symfony bundle for handling redirection",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matt Halliday",
+            "email": "matt.halliday@autologic.com"
+        }
+    ],
+    "require": {
+        "symfony/symfony": "^2.7 || ^3.0",
+        "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Autologic\\Bundle\\RedirectBundle\\": ""
+        }
+    }
+}
