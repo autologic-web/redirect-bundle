@@ -19,7 +19,7 @@ class AutologicRedirectExtension extends Extension
     {
         $configuration = new Configuration(false);
         $config = $this->processConfiguration($configuration, $configs);
-        $container->setParameter('autologic_redirection.rules', $config['rules']);
+        $container->setParameter('autologic_redirect.rules', $config['rules']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

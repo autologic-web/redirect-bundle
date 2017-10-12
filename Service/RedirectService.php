@@ -20,7 +20,7 @@ class RedirectService
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->rules = $container->getParameter('autologic_redirection.rules');
+        $this->rules = $container->getParameter('autologic_redirect.rules');
     }
 
     /**

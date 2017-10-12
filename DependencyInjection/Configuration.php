@@ -13,7 +13,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('autologic_redirection');
+        $rootNode = $treeBuilder->root('autologic_redirect');
 
         $rootNode->children()
             ->arrayNode('rules')
