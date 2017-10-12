@@ -2,7 +2,6 @@
 
 namespace Autologic\Bundle\RedirectBundle\DependencyInjection;
 
-use Symfony\Bundle\FrameworkBundle\DependencyInjection\Configuration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -17,7 +16,7 @@ class AutologicRedirectExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration(false);
+        $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         $container->setParameter('autologic_redirect.rules', $config['rules']);
 

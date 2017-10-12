@@ -15,10 +15,16 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('autologic_redirect');
 
-        $rootNode->children()
-            ->arrayNode('rules')
-                ->defaultValue([])
-            ->end();
+        $rootNode
+            ->children()
+                ->arrayNode('rules')
+                    ->useAttributeAsKey('path')
+                        ->prototype('array')
+                        ->prototype('scalar')
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
 
         return $treeBuilder;
     }

@@ -30,13 +30,11 @@ class RedirectService
      */
     public function redirect(Request $request)
     {
-        $path = $request->getUri();
-
+        $path = $request->getPathInfo();
         if (array_key_exists($path, $this->rules)) {
-            return new RedirectResponse($this->rules[$path][0], Response::HTTP_MOVED_PERMANENTLY);
+            return new RedirectResponse($this->rules[$path]['redirect'], Response::HTTP_MOVED_PERMANENTLY);
         } else {
             throw new RedirectionRuleNotFoundException('Redirection rule not found for ' . $path);
         }
-
     }
 }
