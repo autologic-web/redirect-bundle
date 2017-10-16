@@ -7,6 +7,8 @@ It catches exception events, if they are of type `NotFoundHttpException` it will
 
 Works for Symfony 2.8 or 3.x with PHP > 7.1
 
+It's been designed to be as unobtrusive as possible since the need to do this sort of thing is often temporary - Google recommends leaving them in place for a year. Just include the bundle and add a block of configuration for your redirect rules.
+
 ## Installation
 
 Install via Composer
@@ -43,7 +45,7 @@ class AppKernel extends Kernel
 
 ## Configuration
 
-Use regular expressions to match routes and set the redirect URL and optionally, the status code (default is 301) for the redirection and whether the original URI should be appended to the redirection.
+Use regular expressions to match routes and set the redirect URL and optionally, the status code (default is 301) for the redirection and whether the original URI should be appended to the redirection (useful in the case that other services/applications have their own redirect logic in place or route structure is the same on a different domain).
 
 ```yaml
 # app/config.yml
