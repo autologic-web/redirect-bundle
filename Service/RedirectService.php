@@ -3,10 +3,10 @@
 namespace Autologic\Bundle\RedirectBundle\Service;
 
 use Autologic\Bundle\RedirectBundle\Exception\RedirectionRuleNotFoundException;
+use Autologic\Bundle\RedirectBundle\ValueObject\RedirectRule;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class RedirectService
 {
@@ -32,16 +32,32 @@ class RedirectService
     {
         $url = $request->getUri();
         foreach ($this->rules as $pattern => $redirect) {
-            preg_match($pattern, $url, $matches);
+            $redirectRule = (new RedirectRule())->fromConfigRule($pattern, $redirect);
+            preg_match($redirectRule->getPattern(), $url, $matches);
             if (!empty($matches)) {
-                $protocol = ($request->isSecure()) ? 'https://' : 'http://';
                 return new RedirectResponse(
-                    $protocol . $this->rules[$pattern]['redirect'],
-                    Response::HTTP_MOVED_PERMANENTLY
+                    $this->generateRedirectURL($request, $redirectRule),
+                    $redirectRule->getMethod()
                 );
             }
         }
 
         throw new RedirectionRuleNotFoundException('Redirection rule not found for ' . $url);
+    }
+
+    /**
+     * @param Request $request
+     * @param RedirectRule $redirectRule
+     * @return string
+     */
+    private function generateRedirectURL(Request $request, RedirectRule $redirectRule)
+    {
+        $protocol = ($request->isSecure()) ? 'https://' : 'http://';
+        $redirectURL = $protocol . $redirectRule->getRedirect();
+        if ($redirectRule->isURIForwarding()) {
+            $redirectURL .= $request->getRequestUri();
+        }
+
+        return $redirectURL;
     }
 }
