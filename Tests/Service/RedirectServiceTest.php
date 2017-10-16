@@ -22,7 +22,8 @@ class RedirectServiceTest extends AutologicTestCase
     public function testRedirect_MatchFound_ReturnsRedirectResponse()
     {
         $rules = [
-            '/.*some-matching-path/' => [
+            [
+                'pattern'  => '/.*some-matching-path/',
                 'redirect' => self::MATCHING_REDIRECT_URI,
             ],
         ];
@@ -46,7 +47,8 @@ class RedirectServiceTest extends AutologicTestCase
         $this->expectException(RedirectionRuleNotFoundException::class);
 
         $rules = [
-            '/.*non-matching-path/' => [
+            [
+                'pattern'  => '/.*non-matching-path/',
                 'redirect' => self::MATCHING_REDIRECT_URI,
             ],
         ];
@@ -64,7 +66,8 @@ class RedirectServiceTest extends AutologicTestCase
     public function testRedirect_WithForwarding_ReturnsURLWithOriginalPath()
     {
         $rules = [
-            '/.*some-matching-path/' => [
+            [
+                'pattern'    => '/.*some-matching-path/',
                 'redirect'   => self::MATCHING_REDIRECT_URI,
                 'forwarding' => true
             ],
@@ -88,9 +91,10 @@ class RedirectServiceTest extends AutologicTestCase
     public function testRedirect_WithMethodSet_ReturnsRedirectWithMethod()
     {
         $rules = [
-            '/.*some-matching-path/' => [
-                'redirect'   => self::MATCHING_REDIRECT_URI,
-                'method' => Response::HTTP_TEMPORARY_REDIRECT
+            [
+                'pattern'  => '/.*some-matching-path/',
+                'redirect' => self::MATCHING_REDIRECT_URI,
+                'status'   => Response::HTTP_TEMPORARY_REDIRECT
             ],
         ];
         /** @var Container|m\mock $container */
@@ -117,10 +121,12 @@ class RedirectServiceTest extends AutologicTestCase
     {
         $uriExtra = '/extra';
         $rules = [
-            '/.*some-matching-path\/something-else/' => [
+            [
+                'pattern'  => '/.*some-matching-path\/something-else/',
                 'redirect' => self::MATCHING_REDIRECT_URI . $uriExtra,
             ],
-            '/.*some-matching-path/' => [
+            [
+                'pattern'  => '/.*some-matching-path/',
                 'redirect' => self::MATCHING_REDIRECT_URI,
             ],
         ];
@@ -142,7 +148,8 @@ class RedirectServiceTest extends AutologicTestCase
     public function testRedirect_WithHTTPS_ReturnsHTTPSURL()
     {
         $rules = [
-            '/.*some-matching-path/' => [
+            [
+                'pattern'  => '/.*some-matching-path/',
                 'redirect' => self::MATCHING_REDIRECT_URI,
             ],
         ];

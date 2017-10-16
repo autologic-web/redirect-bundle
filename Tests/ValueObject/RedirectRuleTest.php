@@ -15,10 +15,8 @@ class RedirectRuleTest extends AutologicTestCase
     public function testFromConfigRule_SetsDefaults()
     {
         $rule = [
-            [
-                'pattern'  => self::REDIRECT_PATTERN,
-                'redirect' => self::REDIRECT_URL,
-            ],
+            'pattern'  => self::REDIRECT_PATTERN,
+            'redirect' => self::REDIRECT_URL,
         ];
 
         $redirectRule = (new RedirectRule())->fromConfigRule($rule);
@@ -32,11 +30,9 @@ class RedirectRuleTest extends AutologicTestCase
     public function testFromConfigRule_WithStatus_SetsStatus()
     {
         $rule = [
-            [
-                'pattern'  => self::REDIRECT_PATTERN,
-                'redirect' => self::REDIRECT_URL,
-                'status'   => Response::HTTP_TEMPORARY_REDIRECT,
-            ],
+            'pattern'  => self::REDIRECT_PATTERN,
+            'redirect' => self::REDIRECT_URL,
+            'status'   => Response::HTTP_TEMPORARY_REDIRECT,
         ];
 
         $redirectRule = (new RedirectRule())->fromConfigRule($rule);
@@ -50,11 +46,9 @@ class RedirectRuleTest extends AutologicTestCase
     public function testFromConfigRule_WithForwarding_SetsForwarding()
     {
         $rule = [
-            [
-                'pattern'    => self::REDIRECT_PATTERN,
-                'redirect'   => self::REDIRECT_URL,
-                'forwarding' => true,
-            ],
+            'pattern'    => self::REDIRECT_PATTERN,
+            'redirect'   => self::REDIRECT_URL,
+            'forwarding' => true,
         ];
 
         $redirectRule = (new RedirectRule())->fromConfigRule($rule);
