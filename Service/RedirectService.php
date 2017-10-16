@@ -30,11 +30,18 @@ class RedirectService
      */
     public function redirect(Request $request)
     {
-        $path = $request->getPathInfo();
-        if (array_key_exists($path, $this->rules)) {
-            return new RedirectResponse($this->rules[$path]['redirect'], Response::HTTP_MOVED_PERMANENTLY);
-        } else {
-            throw new RedirectionRuleNotFoundException('Redirection rule not found for ' . $path);
+        $url = $request->getUri();
+        foreach ($this->rules as $pattern => $redirect) {
+            preg_match($pattern, $url, $matches);
+            if (!empty($matches)) {
+                $protocol = ($request->isSecure()) ? 'https://' : 'http://';
+                return new RedirectResponse(
+                    $protocol . $this->rules[$pattern]['redirect'],
+                    Response::HTTP_MOVED_PERMANENTLY
+                );
+            }
         }
+
+        throw new RedirectionRuleNotFoundException('Redirection rule not found for ' . $url);
     }
 }

@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('rules')
-                    ->useAttributeAsKey('path')
+                    ->useAttributeAsKey('pattern')
                         ->prototype('array')
                         ->prototype('scalar')
                     ->end()
