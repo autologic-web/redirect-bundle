@@ -24,7 +24,7 @@ class RedirectRule
     /**
      * @var integer
      */
-    private $method = Response::HTTP_MOVED_PERMANENTLY;
+    private $statusCode = Response::HTTP_MOVED_PERMANENTLY;
 
     /**
      * @return string
@@ -77,36 +77,35 @@ class RedirectRule
     /**
      * @return int
      */
-    public function getMethod()
+    public function getStatusCode()
     {
-        return $this->method;
+        return $this->statusCode;
     }
 
     /**
-     * @param int $method
+     * @param int $statusCode
      */
-    public function setMethod($method)
+    public function setStatusCode($statusCode)
     {
-        $this->method = $method;
+        $this->statusCode = $statusCode;
     }
 
     /**
-     * @param string $pattern
      * @param array $rule
      * @return RedirectRule
      */
-    public function fromConfigRule($pattern, $rule)
+    public function fromConfigRule($rule)
     {
         $redirectRule = clone $this;
-        $redirectRule->setPattern($pattern);
+        $redirectRule->setPattern($rule['pattern']);
         $redirectRule->setRedirect($rule['redirect']);
 
         if (isset($rule['forwarding'])) {
             $redirectRule->setURIForwarding($rule['forwarding']);
         }
 
-        if (isset($rule['method'])) {
-            $redirectRule->setMethod($rule['method']);
+        if (isset($rule['status'])) {
+            $redirectRule->setStatusCode($rule['status']);
         }
 
         return $redirectRule;

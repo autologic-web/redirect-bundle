@@ -4,15 +4,15 @@ namespace Autologic\Bundle\RedirectBundle\Tests\Service;
 
 use Autologic\Bundle\RedirectBundle\Exception\RedirectionRuleNotFoundException;
 use Autologic\Bundle\RedirectBundle\Service\RedirectService;
+use Autologic\Bundle\RedirectBundle\Tests\AutologicTestCase;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Mockery as m;
 use Symfony\Component\HttpFoundation\Response;
 
-class RedirectServiceTest extends TestCase
+class RedirectServiceTest extends AutologicTestCase
 {
     const MATCHING_PATH = '/some-matching-path/something-else';
     const MATCHING_URI = 'http://domain.com' . self::MATCHING_PATH;
@@ -31,7 +31,6 @@ class RedirectServiceTest extends TestCase
         /** @var Request|m\mock $request */
         $request = m::mock(Request::class)->shouldIgnoreMissing();
         $request->shouldReceive('getUri')->once()->andReturn(self::MATCHING_URI);
-        $request->shouldReceive('getRequestUri')->once()->andReturn(self::MATCHING_PATH);
         $request->shouldReceive('isSecure')->once()->andReturn(false);
 
         $redirectService = new RedirectService($container);
@@ -56,7 +55,6 @@ class RedirectServiceTest extends TestCase
         /** @var Request|m\mock $request */
         $request = m::mock(Request::class)->shouldIgnoreMissing();
         $request->shouldReceive('getUri')->once()->andReturn(self::MATCHING_URI);
-        $request->shouldNotReceive('getRequestUri');
         $request->shouldNotReceive('isSecure');
 
         $redirectService = new RedirectService($container);
@@ -105,7 +103,6 @@ class RedirectServiceTest extends TestCase
         /** @var Request|m\mock $request */
         $request = m::mock(Request::class)->shouldIgnoreMissing();
         $request->shouldReceive('getUri')->once()->andReturn(self::MATCHING_URI);
-        $request->shouldReceive('getRequestUri')->once()->andReturn(self::MATCHING_PATH);
         $request->shouldReceive('isSecure')->once()->andReturn(false);
 
         $redirectService = new RedirectService($container);
@@ -132,7 +129,6 @@ class RedirectServiceTest extends TestCase
         /** @var Request|m\mock $request */
         $request = m::mock(Request::class)->shouldIgnoreMissing();
         $request->shouldReceive('getUri')->once()->andReturn(self::MATCHING_URI);
-        $request->shouldReceive('getRequestUri')->once()->andReturn(self::MATCHING_PATH);
         $request->shouldReceive('isSecure')->once()->andReturn(false);
 
         $redirectService = new RedirectService($container);
@@ -155,7 +151,6 @@ class RedirectServiceTest extends TestCase
         /** @var Request|m\mock $request */
         $request = m::mock(Request::class)->shouldIgnoreMissing();
         $request->shouldReceive('getUri')->once()->andReturn(self::MATCHING_URI);
-        $request->shouldReceive('getRequestUri')->once()->andReturn(self::MATCHING_PATH);
         $request->shouldReceive('isSecure')->once()->andReturn(true);
 
         $redirectService = new RedirectService($container);

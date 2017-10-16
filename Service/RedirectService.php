@@ -31,13 +31,13 @@ class RedirectService
     public function redirect(Request $request)
     {
         $url = $request->getUri();
-        foreach ($this->rules as $pattern => $redirect) {
-            $redirectRule = (new RedirectRule())->fromConfigRule($pattern, $redirect);
+        foreach ($this->rules as $redirect) {
+            $redirectRule = (new RedirectRule())->fromConfigRule($redirect);
             preg_match($redirectRule->getPattern(), $url, $matches);
             if (!empty($matches)) {
                 return new RedirectResponse(
                     $this->generateRedirectURL($request, $redirectRule),
-                    $redirectRule->getMethod()
+                    $redirectRule->getStatusCode()
                 );
             }
         }

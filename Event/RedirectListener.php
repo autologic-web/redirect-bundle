@@ -4,7 +4,7 @@ namespace Autologic\Bundle\RedirectBundle\Event;
 
 use Autologic\Bundle\RedirectBundle\Exception\RedirectionRuleNotFoundException;
 use Autologic\Bundle\RedirectBundle\Service\RedirectService;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -16,29 +16,38 @@ class RedirectListener
     private $redirectService;
 
     /**
-     * @param RedirectService $redirectService
+     * @var null|LoggerInterface
      */
-    public function __construct(RedirectService $redirectService)
+    private $logger;
+
+    /**
+     * @param RedirectService $redirectService
+     * @param LoggerInterface|null $logger
+     */
+    public function __construct(RedirectService $redirectService, LoggerInterface $logger = null)
     {
         $this->redirectService = $redirectService;
+        $this->logger = $logger;
     }
 
     /**
      * @param GetResponseForExceptionEvent $event
+     * @return boolean
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if (!$event->getException() instanceof NotFoundHttpException) {
-            return ;
-        }
-
-        if ($event->getException()->getStatusCode() === Response::HTTP_NOT_FOUND) {
+        if ($event->getException() instanceof NotFoundHttpException) {
             try {
                 $event->setResponse($this->redirectService->redirect($event->getRequest()));
+
+                return true;
             } catch (RedirectionRuleNotFoundException $e) {
-                // no rule found for request so don't modify response
-                // possibly log or show if debug mode enabled?
+                if ($this->logger !== null) {
+                    $this->logger->notice($e->getMessage());
+                }
             }
         }
+
+        return false;
     }
 }
