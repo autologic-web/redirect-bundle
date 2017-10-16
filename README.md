@@ -1,5 +1,7 @@
 # Symfony Redirect Bundle
 
+[![Build Status](https://travis-ci.com/autologic-web/redirect-bundle.svg?token=u16nzQx7npX8bQUAmcyy&branch=master)](https://travis-ci.com/autologic-web/redirect-bundle)
+
 Configure redirections after a migration or structural changes to your app/website.
 It catches exception events, if they are of type `NotFoundHttpException` it will look for a configured rule and return a `RedirectResponse` response to redirect the user.
 
