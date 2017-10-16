@@ -17,12 +17,12 @@ class RedirectRule
     private $redirect;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $URIForwarding = false;
 
     /**
-     * @var integer
+     * @var int
      */
     private $statusCode = Response::HTTP_MOVED_PERMANENTLY;
 
@@ -92,6 +92,7 @@ class RedirectRule
 
     /**
      * @param array $rule
+     *
      * @return RedirectRule
      */
     public function fromConfigRule($rule)

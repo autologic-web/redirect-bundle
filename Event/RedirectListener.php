@@ -21,7 +21,7 @@ class RedirectListener
     private $logger;
 
     /**
-     * @param RedirectService $redirectService
+     * @param RedirectService      $redirectService
      * @param LoggerInterface|null $logger
      */
     public function __construct(RedirectService $redirectService, LoggerInterface $logger = null)
@@ -32,7 +32,8 @@ class RedirectListener
 
     /**
      * @param GetResponseForExceptionEvent $event
-     * @return boolean
+     *
+     * @return bool
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {

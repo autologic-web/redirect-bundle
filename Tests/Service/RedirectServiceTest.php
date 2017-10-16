@@ -5,17 +5,17 @@ namespace Autologic\Bundle\RedirectBundle\Tests\Service;
 use Autologic\Bundle\RedirectBundle\Exception\RedirectionRuleNotFoundException;
 use Autologic\Bundle\RedirectBundle\Service\RedirectService;
 use Autologic\Bundle\RedirectBundle\Tests\AutologicTestCase;
+use Mockery as m;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Mockery as m;
 use Symfony\Component\HttpFoundation\Response;
 
 class RedirectServiceTest extends AutologicTestCase
 {
     const MATCHING_PATH = '/some-matching-path/something-else';
-    const MATCHING_URI = 'http://domain.com' . self::MATCHING_PATH;
+    const MATCHING_URI = 'http://domain.com'.self::MATCHING_PATH;
     const MATCHING_REDIRECT_URI = 'domain.com/the-redirect';
     const PROTOCOL = 'http://';
 
@@ -38,7 +38,7 @@ class RedirectServiceTest extends AutologicTestCase
         $redirectResponse = $redirectService->redirect($request);
 
         Assert::assertInstanceOf(RedirectResponse::class, $redirectResponse);
-        Assert::assertEquals(self::PROTOCOL . self::MATCHING_REDIRECT_URI, $redirectResponse->getTargetUrl());
+        Assert::assertEquals(self::PROTOCOL.self::MATCHING_REDIRECT_URI, $redirectResponse->getTargetUrl());
         Assert::assertEquals(Response::HTTP_MOVED_PERMANENTLY, $redirectResponse->getStatusCode());
     }
 
@@ -69,7 +69,7 @@ class RedirectServiceTest extends AutologicTestCase
             [
                 'pattern'    => '/.*some-matching-path/',
                 'redirect'   => self::MATCHING_REDIRECT_URI,
-                'forwarding' => true
+                'forwarding' => true,
             ],
         ];
         $container = $this->createContainer($rules);
@@ -84,7 +84,7 @@ class RedirectServiceTest extends AutologicTestCase
         $redirectResponse = $redirectService->redirect($request);
 
         Assert::assertInstanceOf(RedirectResponse::class, $redirectResponse);
-        Assert::assertEquals(self::PROTOCOL . self::MATCHING_REDIRECT_URI . self::MATCHING_PATH, $redirectResponse->getTargetUrl());
+        Assert::assertEquals(self::PROTOCOL.self::MATCHING_REDIRECT_URI.self::MATCHING_PATH, $redirectResponse->getTargetUrl());
         Assert::assertEquals(Response::HTTP_MOVED_PERMANENTLY, $redirectResponse->getStatusCode());
     }
 
@@ -94,7 +94,7 @@ class RedirectServiceTest extends AutologicTestCase
             [
                 'pattern'  => '/.*some-matching-path/',
                 'redirect' => self::MATCHING_REDIRECT_URI,
-                'status'   => Response::HTTP_TEMPORARY_REDIRECT
+                'status'   => Response::HTTP_TEMPORARY_REDIRECT,
             ],
         ];
         /** @var Container|m\mock $container */
@@ -113,7 +113,7 @@ class RedirectServiceTest extends AutologicTestCase
         $redirectResponse = $redirectService->redirect($request);
 
         Assert::assertInstanceOf(RedirectResponse::class, $redirectResponse);
-        Assert::assertEquals(self::PROTOCOL . self::MATCHING_REDIRECT_URI, $redirectResponse->getTargetUrl());
+        Assert::assertEquals(self::PROTOCOL.self::MATCHING_REDIRECT_URI, $redirectResponse->getTargetUrl());
         Assert::assertEquals(Response::HTTP_TEMPORARY_REDIRECT, $redirectResponse->getStatusCode());
     }
 
@@ -123,7 +123,7 @@ class RedirectServiceTest extends AutologicTestCase
         $rules = [
             [
                 'pattern'  => '/.*some-matching-path\/something-else/',
-                'redirect' => self::MATCHING_REDIRECT_URI . $uriExtra,
+                'redirect' => self::MATCHING_REDIRECT_URI.$uriExtra,
             ],
             [
                 'pattern'  => '/.*some-matching-path/',
@@ -141,7 +141,7 @@ class RedirectServiceTest extends AutologicTestCase
         $redirectResponse = $redirectService->redirect($request);
 
         Assert::assertInstanceOf(RedirectResponse::class, $redirectResponse);
-        Assert::assertEquals(self::PROTOCOL . self::MATCHING_REDIRECT_URI . $uriExtra, $redirectResponse->getTargetUrl());
+        Assert::assertEquals(self::PROTOCOL.self::MATCHING_REDIRECT_URI.$uriExtra, $redirectResponse->getTargetUrl());
         Assert::assertEquals(Response::HTTP_MOVED_PERMANENTLY, $redirectResponse->getStatusCode());
     }
 
@@ -164,12 +164,13 @@ class RedirectServiceTest extends AutologicTestCase
         $redirectResponse = $redirectService->redirect($request);
 
         Assert::assertInstanceOf(RedirectResponse::class, $redirectResponse);
-        Assert::assertEquals('https://' . self::MATCHING_REDIRECT_URI, $redirectResponse->getTargetUrl());
+        Assert::assertEquals('https://'.self::MATCHING_REDIRECT_URI, $redirectResponse->getTargetUrl());
         Assert::assertEquals(Response::HTTP_MOVED_PERMANENTLY, $redirectResponse->getStatusCode());
     }
 
     /**
      * @param array $rules
+     *
      * @return Container|m\mock
      */
     private function createContainer($rules)

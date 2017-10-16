@@ -25,8 +25,10 @@ class RedirectService
 
     /**
      * @param Request $request
-     * @return RedirectResponse
+     *
      * @throws RedirectionRuleNotFoundException
+     *
+     * @return RedirectResponse
      */
     public function redirect(Request $request)
     {
@@ -42,18 +44,19 @@ class RedirectService
             }
         }
 
-        throw new RedirectionRuleNotFoundException('Redirection rule not found for ' . $url);
+        throw new RedirectionRuleNotFoundException('Redirection rule not found for '.$url);
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param RedirectRule $redirectRule
+     *
      * @return string
      */
     private function generateRedirectURL(Request $request, RedirectRule $redirectRule)
     {
         $protocol = ($request->isSecure()) ? 'https://' : 'http://';
-        $redirectURL = $protocol . $redirectRule->getRedirect();
+        $redirectURL = $protocol.$redirectRule->getRedirect();
         if ($redirectRule->isURIForwarding()) {
             $redirectURL .= $request->getRequestUri();
         }

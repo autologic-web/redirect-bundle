@@ -1,6 +1,6 @@
 # Symfony Redirect Bundle
 
-[![Build Status](https://travis-ci.com/autologic-web/redirect-bundle.svg?token=u16nzQx7npX8bQUAmcyy&branch=master)](https://travis-ci.com/autologic-web/redirect-bundle)
+[![Build Status](https://travis-ci.com/autologic-web/redirect-bundle.svg?token=u16nzQx7npX8bQUAmcyy&branch=master)](https://travis-ci.com/autologic-web/redirect-bundle) [![StyleCI](https://styleci.io/repos/106713467/shield?branch=master)](https://styleci.io/repos/106713467)
 
 Configure redirections after a migration or structural changes to your app/website. It helps with SEO rankings and user experience.
 It catches exception events, if they are of type `NotFoundHttpException` it will look for a configured rule and return a `RedirectResponse` response to redirect the user. In doing so, it avoids complicated `.htaccess` or vhost configurations but can be used in conjunction with them - picking up redirects only after a page has not been found.

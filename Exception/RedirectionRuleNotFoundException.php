@@ -2,4 +2,6 @@
 
 namespace Autologic\Bundle\RedirectBundle\Exception;
 
-class RedirectionRuleNotFoundException extends \Exception {}
+class RedirectionRuleNotFoundException extends \Exception
+{
+}
