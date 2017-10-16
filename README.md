@@ -46,6 +46,8 @@ class AppKernel extends Kernel
 Use regular expressions to match routes and set the redirect URL and optionally, the status code (default is 301) for the redirection and whether the original URI should be appended to the redirection.
 
 ```yaml
+# app/config.yml
+
 autologic_redirect:
   rules:
     # basic usage
@@ -57,4 +59,19 @@ autologic_redirect:
     # priority: this first rule will match first when a user visits /old-route/sub-route, the second acting as a fallback
     - { pattern: '/.*old-route\/sub-route', redirect: 'domain.com/new-route/sub-route' }
     - { pattern: '/.*old-route/', redirect: 'domain.com/new-route' }
+```
+
+Logging to enable logging of unmatched 404 errors, just inject a logger into the listener service in your services.yml:
+
+```yaml
+# app/services.yml
+
+services:
+  autologic_redirect.event.redirect_listener:
+    class: Autologic\Bundle\RedirectBundle\Event\RedirectListener
+    arguments:
+      - '@autologic_redirect.service.redirect_service'
+      - '@logger'
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }
 ```
