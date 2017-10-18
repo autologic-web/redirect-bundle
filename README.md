@@ -61,6 +61,9 @@ autologic_redirect:
     # priority: this first rule will match first when a user visits /old-route/sub-route, the second acting as a fallback
     - { pattern: '/.*old-route\/sub-route', redirect: 'domain.com/new-route/sub-route' }
     - { pattern: '/.*old-route/', redirect: 'domain.com/new-route' }
+    # match subdomains and more complex patterns and use parameters
+    - { pattern: '/au\..+?\.[^\/]+.*blog\/old-australian-blog-post-on-any-domain-of-subdomain/',
+        redirect: 'au.%base_domain%/news/new-australian-news-article' }
 ```
 
 ## Logging 
