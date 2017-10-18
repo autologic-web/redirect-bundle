@@ -45,7 +45,7 @@ class AppKernel extends Kernel
 
 ## Configuration
 
-Use regular expressions to match routes and set the redirect URL and optionally, the status code (default is 301) for the redirection and whether the original URI should be appended to the redirection (useful in the case that other services/applications have their own redirect logic in place or route structure is the same on a different domain).
+Use regular expressions to match URIs (the service currently uses `preg_match`) and set the redirect URL and optionally, the status code (default is 301) for the redirection and whether the original URI should be appended to the redirection (useful in the case that other services/applications have their own redirect logic in place or route structure is the same on a different domain).
 
 ```yaml
 # app/config.yml
@@ -53,11 +53,11 @@ Use regular expressions to match routes and set the redirect URL and optionally,
 autologic_redirect:
   rules:
     # basic usage
-    - { pattern: '/.*old-route/', redirect: 'domain.com/new-route' }
-    # custom status code
-    - { pattern: '/.*old-route/', redirect: 'domain.com/new-route', status: 302 }
+    - { pattern: '/old-route/', redirect: 'domain.com/new-route' }
+    # custom status code: useful for obvious reasons but also handy while debugging to stop chrome caching 301 redirects
+    - { pattern: '/old-route/', redirect: 'domain.com/new-route', status: 302 }
     # forwarding: this will redirect to domain.com/new-route/old-route
-    - { pattern: '/.*old-route/', redirect: 'domain.com/new-route', forwarding: true }
+    - { pattern: '/old-route/', redirect: 'domain.com/new-route', forwarding: true }
     # priority: this first rule will match first when a user visits /old-route/sub-route, the second acting as a fallback
     - { pattern: '/.*old-route\/sub-route', redirect: 'domain.com/new-route/sub-route' }
     - { pattern: '/.*old-route/', redirect: 'domain.com/new-route' }
