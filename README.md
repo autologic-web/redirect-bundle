@@ -2,8 +2,9 @@
 
 [![Build Status](https://travis-ci.com/autologic-web/redirect-bundle.svg?token=u16nzQx7npX8bQUAmcyy&branch=master)](https://travis-ci.com/autologic-web/redirect-bundle) [![StyleCI](https://styleci.io/repos/106713467/shield?branch=master)](https://styleci.io/repos/106713467)
 
-Configure redirections after a migration or structural changes to your app/website. It helps with SEO rankings and user experience.
-It catches exception events, if they are of type `NotFoundHttpException` it will look for a configured rule and return a `RedirectResponse` response to redirect the user. In doing so, it avoids complicated `.htaccess` or vhost configurations but can be used in conjunction with them - picking up redirects only after a page has not been found.
+Configure redirections after a migration or structural changes to your app/website.
+
+It catches exception events, if they are of type `NotFoundHttpException` it will look for a configured rule and return a `RedirectResponse` response to redirect the user.
 
 Works for Symfony 2.8 or 3.x with PHP > 7.1
 
@@ -45,16 +46,34 @@ class AppKernel extends Kernel
 
 ## Configuration
 
-Use regular expressions to match URIs (the service currently uses `preg_match`) and set the redirect URL and optionally, the status code (default is 301) for the redirection and whether the original URI should be appended to the redirection (useful in the case that other services/applications have their own redirect logic in place or route structure is the same on a different domain).
-
+### Basic Usage
 ```yaml
 # app/config.yml
 
 autologic_redirect:
   rules:
-    # basic usage
     - { pattern: '/old-route/', redirect: 'domain.com/new-route' }
-    # custom status code: useful for obvious reasons but also handy while debugging to stop chrome caching 301 redirects
+```
+
+### `pattern` (string, required)
+Use regular expressions to match the full URI being requested. The service catches 404 exceptions, uses `preg_match` to find a rule matching the missing page's URI before throwing the 404 in the event it cannot match.
+
+### `redirect` (string, required)
+The fully qualified redirect URI. The bundle will set the protocol (http/https) based on the incoming original request so it ports from dev to prod easily.
+
+### `status` (int, optional)
+Set the status code (__default: 301__) for the redirection. Tip: use 302 while debugging to avoid 301 permanent redirects from being cached in the browser.
+
+### `forwarding` (bool, optional)
+Append the original route to the redirection (__default: false__). Useful in the case that other services/applications have their own redirect logic in place or route structure is the same on a different domain or path.
+
+### Other Examples
+```yaml
+# app/config.yml
+
+autologic_redirect:
+  rules:
+    # custom status code
     - { pattern: '/old-route/', redirect: 'domain.com/new-route', status: 302 }
     # forwarding: this will redirect to domain.com/new-route/old-route
     - { pattern: '/old-route/', redirect: 'domain.com/new-route', forwarding: true }
