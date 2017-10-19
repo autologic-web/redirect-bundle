@@ -15,9 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 class RedirectServiceTest extends AutologicTestCase
 {
     const MATCHING_PATH = '/some-matching-path/something-else';
-    const MATCHING_URI = 'http://domain.com'.self::MATCHING_PATH;
-    const MATCHING_REDIRECT_URI = 'domain.com/the-redirect';
+    const RELATIVE_PATH = '/relative-path';
     const PROTOCOL = 'http://';
+    const BASE_DOMAIN = 'domain.com';
+    const MATCHING_URI = self::PROTOCOL.self::BASE_DOMAIN.self::MATCHING_PATH;
+    const MATCHING_REDIRECT_URI = self::BASE_DOMAIN.'/the-redirect';
 
     public function testRedirect_MatchFound_ReturnsRedirectResponse()
     {
@@ -165,6 +167,30 @@ class RedirectServiceTest extends AutologicTestCase
 
         Assert::assertInstanceOf(RedirectResponse::class, $redirectResponse);
         Assert::assertEquals('https://'.self::MATCHING_REDIRECT_URI, $redirectResponse->getTargetUrl());
+        Assert::assertEquals(Response::HTTP_MOVED_PERMANENTLY, $redirectResponse->getStatusCode());
+    }
+
+    public function testRedirect_WithRelativePath_ReturnsSameDomainRedirect()
+    {
+        $rules = [
+            [
+                'pattern'  => '/.*some-matching-path/',
+                'redirect' => self::RELATIVE_PATH,
+            ],
+        ];
+        $container = $this->createContainer($rules);
+
+        /** @var Request|m\mock $request */
+        $request = m::mock(Request::class)->shouldIgnoreMissing();
+        $request->shouldReceive('getUri')->once()->andReturn(self::MATCHING_URI);
+        $request->shouldReceive('isSecure')->once()->andReturn(false);
+        $request->shouldReceive('getHost')->once()->andReturn(self::BASE_DOMAIN);
+
+        $redirectService = new RedirectService($container);
+        $redirectResponse = $redirectService->redirect($request);
+
+        Assert::assertInstanceOf(RedirectResponse::class, $redirectResponse);
+        Assert::assertEquals(self::PROTOCOL.self::BASE_DOMAIN.self::RELATIVE_PATH, $redirectResponse->getTargetUrl());
         Assert::assertEquals(Response::HTTP_MOVED_PERMANENTLY, $redirectResponse->getStatusCode());
     }
 
