@@ -67,6 +67,12 @@ Set the status code (__default: 301__) for the redirection. Tip: use 302 while d
 ### `forwarding` (bool, optional)
 Append the original route to the redirection (__default: false__). Useful in the case that other services/applications have their own redirect logic in place or route structure is the same on a different domain or path.
 
+### `absolute` (bool, optional)
+Force absolute or relative redirects (__default: null/auto__). If left unset, it will detect a hostname in the redirect and either use the original request host if the redirect does not contain a host or use the redirect verbatim if it does.
+
+### `protocol` (string, optional)
+Force the redirect protocol (__default: null/auto__). If left unset, it will detect the protocol from the original request and use that.
+
 ### Other Examples
 ```yaml
 # app/config.yml
@@ -77,6 +83,11 @@ autologic_redirect:
     - { pattern: '/old-route/', redirect: 'domain.com/new-route', status: 302 }
     # forwarding: this will redirect to domain.com/new-route/old-route
     - { pattern: '/old-route/', redirect: 'domain.com/new-route', forwarding: true }
+    # absolute: will force relative or absolute redirects
+    # if false it will redirect to the route on the current host
+    - { pattern: '/old-route/', redirect: '/new-route', absolute: false }
+    # protocol: will force the protocol
+    - { pattern: '/old-route/', redirect: '/new-route', protocol: 'ftp://' }
     # priority: this first rule will match first when a user visits /old-route/sub-route, the second acting as a fallback
     - { pattern: '/.*old-route\/sub-route', redirect: 'domain.com/new-route/sub-route' }
     - { pattern: '/.*old-route/', redirect: 'domain.com/new-route' }
