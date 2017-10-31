@@ -1,4 +1,7 @@
 language: php
+env:
+  global:
+    - secure: "wjLjsqNpPv7WRcbeANbeOVMbsVUq8v6VlVSe7VBtOKcO2C3QvJlZb+lJvkVzh87p6MVaeLjZVzfgPkEfPhJINMGORt4Ane2fUgMQnw6zqh3Qd0PhAoGZZoGgYyNPEWRqIiAuNaRSjNoA8BT2IKmMIjCZKLJ0XYmeE2CP9bFY2ndbvZ+mZdcwdkKlfPNoFbEMyzm14G2QP07V9/hx5nzbaUbsHjTYwMJMnavSKIW0RNjIPctTRUqb+wmV6ygn14RMhCGVjghmoaISg5ucVAuowo+22aT7fNI9rAeiMpUiFF8rCA2zcwM5H4LEBal1/5SPsZexpMaJcxKOp1snp++HEh9Vkw+9z7Hs9JAEF5ixhpIqduCPdBaVnv8MecRIJEY487V1oMURvPuTOupnwKRUlC0xaDgMKbnfeeCfT70aSMl5DpN6EhXdndcLu0VJsL2GXwE3RI7K2+Zc/i3SfqZZbGlgWVa/czgysUGWsHOlbjSEXETCnmUf0izlbgR+yqussle1T1RBQGkoz3j+4JHtNXzmTJrzmdw0T6X5Au4BD5bTWLO4/ZBbnYZVMhyoJ4bHzWMtQYhWYkOlV09KNye1EL5JYNgAppJI+sxrVDZ2S5KXV6O0YdCB3occfTuUi9b84WP/4FerCGvDVOAvqPgk5rrcew8ZMpoJAIGHW/84/5E="
 php:
   - '5.6'
   - '7.1'
@@ -7,4 +10,14 @@ branches:
   only:
     - /.*/
 install: composer install
-script: vendor/bin/phpunit Tests
+script: vendor/bin/phpunit
+jobs:
+  include:
+    - stage: coverage report
+      php: 7.2
+      before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+      after_script:
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
