@@ -34,6 +34,24 @@ class RedirectTest extends AutologicTestCase
         Assert::assertFalse($redirectRule->isURIForwarding());
     }
 
+    public function testSetters_SetValues()
+    {
+        $redirectRule = new Redirect();
+        $redirectRule->setProtocol(self::SECURE_PROTOCOL);
+        $redirectRule->setURIForwarding(true);
+        $redirectRule->setRedirect(self::ROUTE);
+        $redirectRule->setPattern(self::PATTERN);
+        $redirectRule->setAbsolute(false);
+        $redirectRule = $redirectRule->withRequest(new Request());
+
+        Assert::assertSame(self::SECURE_PROTOCOL, $redirectRule->getProtocol());
+        Assert::assertTrue($redirectRule->isURIForwarding());
+        Assert::assertSame(self::ROUTE, $redirectRule->getRedirect());
+        Assert::assertSame(self::PATTERN, $redirectRule->getPattern());
+        Assert::assertFalse($redirectRule->isAbsolute());
+        Assert::assertInstanceOf(Request::class, $redirectRule->getRequest());
+    }
+
     public function testFromConfigRule_WithStatus_SetsStatus()
     {
         $rule = [
